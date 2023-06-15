@@ -1,0 +1,154 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User{
+    id String @id @default(uuid()) @db.Uuid
+    surname String?
+    name String?
+    lastname String?
+    email String? @unique
+    password String? 
+    isActived Boolean 
+    activationLink String?
+    passwordLink String?    
+    file String?
+    colorProfile String? 
+    tokens Token[]
+    class Class[]
+    group Group[]
+    memberGroup MemberGroup[]
+    member Member[]
+}
+
+model File{
+    id String @id
+    name String
+}
+
+model Role{
+    id String @id @default(uuid()) @db.Uuid
+    name String @unique
+    member Member[]
+}
+
+model Token{
+    id String @id @default(uuid()) @db.Uuid
+    refreshToken String
+    user User? @relation(fields: [user_id], references: [id])
+    user_id  String? @db.Uuid
+}
+
+model Class{
+    id String @id @default(uuid()) @db.Uuid
+    title String
+    chapter String?
+    subject String?
+    audience String?
+    cover String?
+    decor String?
+    isArchive Boolean 
+    user User? @relation(fields: [user_id], references: [id])
+    user_id  String? @db.Uuid
+    task Task[]
+    member Member[]
+    theme Theme[]
+}
+
+model Group{
+    id String @id @default(uuid()) @db.Uuid
+    title String
+    user User? @relation(fields: [user_id], references: [id])
+    user_id  String? @db.Uuid
+    memberGroup MemberGroup[]
+}
+
+model MemberGroup{
+    id String @id @default(uuid()) @db.Uuid
+    user User? @relation(fields: [user_id], references: [id])
+    group Group? @relation(fields: [group_id], references: [id])
+    user_id  String? @db.Uuid
+    group_id  String? @db.Uuid
+}
+
+model Member{
+    id String @id @default(uuid()) @db.Uuid
+    user User? @relation(fields: [user_id], references: [id])
+    class Class? @relation(fields: [class_id], references: [id])
+    role Role? @relation(fields: [role_id], references: [id])
+    user_id  String? @db.Uuid
+    class_id  String? @db.Uuid
+    role_id  String? @db.Uuid
+    task Task[]
+    taskComment TaskComment[]
+    complementary Complementary[]
+    complementaryComment ComplementaryComment[]
+}
+
+model Task{
+    id String @id @default(uuid()) @db.Uuid
+    files String[]
+    deadlineDatetime DateTime?
+    title String
+    description String?
+    date DateTime?
+    point Int @default(0)
+    isForm Boolean
+    class Class? @relation(fields: [class_id], references: [id])
+    class_id String? @db.Uuid
+    member Member? @relation(fields: [member_id], references: [id])
+    member_id String? @db.Uuid
+    theme Theme? @relation(fields: [theme_id], references: [id])
+    theme_id String? @db.Uuid
+    complementary Complementary[]
+    taskComment TaskComment[]
+}
+
+model Complementary{
+    id String @id @default(uuid()) @db.Uuid
+    file String[]
+    status Boolean @default(false)
+    mark Int?
+    datetime DateTime?
+    task Task? @relation(fields: [task_id], references: [id])
+    task_id  String? @db.Uuid
+    member Member? @relation(fields: [member_id], references: [id])
+    member_id String? @db.Uuid
+    complementaryComment ComplementaryComment[]
+}
+
+model TaskComment{
+    id String @id @default(uuid()) @db.Uuid
+    text String?
+    datetime DateTime?
+    task Task? @relation(fields: [task_id], references: [id])
+    task_id  String? @db.Uuid
+    member Member? @relation(fields: [member_id], references: [id])
+    member_id  String? @db.Uuid
+}
+
+model ComplementaryComment{
+    id String @id @default(uuid()) @db.Uuid
+    text String?
+    datetime DateTime?
+    complementary Complementary? @relation(fields: [complementary_id], references: [id])
+    complementary_id  String? @db.Uuid
+    member Member? @relation(fields: [member_id], references: [id])
+    member_id  String? @db.Uuid
+}
+
+model Theme{
+    id String @id @default(uuid()) @db.Uuid
+    title String?
+    class Class? @relation(fields: [class_id], references: [id])
+    class_id String? @db.Uuid
+    task Task[]
+}
