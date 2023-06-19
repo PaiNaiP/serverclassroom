@@ -114,5 +114,15 @@ class TaskController{
             next(e)
         }
     }
+
+    async getDecor(req:any, res:any, next:any){
+        try {
+            const {id} = req.body
+            const taskData = await taskService.getDecor(id)
+            res.send(taskData)
+        } catch (e) {
+            next(e)
+        }
+    }
 }
 export default new TaskController()

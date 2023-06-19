@@ -433,6 +433,22 @@ class TaskService{
         memberData.class.task[0].files = files;
         return memberData
     }
+
+    async getDecor(id:string){
+        const task = await prisma.task.findFirst({
+            where:{
+                id:id
+            },
+            include:{
+                class:{
+                    select:{
+                        decor:true
+                    }
+                }
+            }
+        })
+        return task
+    }
 }
 
 export default new TaskService()

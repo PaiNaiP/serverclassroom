@@ -317,19 +317,27 @@ class MemberService{
                 class_id:class_id
             }
         })
-        task.forEach(async(tsk)=>{
-            const complementary = await prisma.complementary.findFirst({
-                where:{
-                    member_id:memberData?.id,
-                    task_id:tsk.id
-                }
-            })
-            await prisma.complementary.delete({
-                where:{
-                    id:complementary?.id
-                }
-            })
+        const role_id = memberData?.role_id
+        const role = await prisma.role.findFirst({
+            where:{
+                id:role_id||undefined
+            }
         })
+        if(role?.name==='student'){
+            task.forEach(async(tsk)=>{
+                const complementary = await prisma.complementary.findFirst({
+                    where:{
+                        member_id:memberData?.id,
+                        task_id:tsk.id
+                    }
+                })
+                await prisma.complementary.delete({
+                    where:{
+                        id:complementary?.id
+                    }
+                })
+            })
+        }
         if(!memberData)
             throw ApiError.BadRequest('Пользователь не найден')
         

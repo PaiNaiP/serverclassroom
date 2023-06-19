@@ -11,4 +11,5 @@ taskRouter.post('/deleteTheme', taskController.deleteTheme)
 taskRouter.post('/allTaskWithoutTheme', taskController.allTaskWithoutTheme)
 taskRouter.post('/allTaskWithTheme', taskController.allTaskWithTheme)
 taskRouter.post('/viewTaskOne', taskController.viewTaskOne)
+taskRouter.post('/getDecor', taskController.getDecor)
 

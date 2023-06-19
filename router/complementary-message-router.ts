@@ -4,6 +4,8 @@ import complementaryMessageController from '../controller/complementary-message-
 export const complementaryMessageRouter = Router();
 complementaryMessageRouter.post('/addMessage', complementaryMessageController.addMessage)
 complementaryMessageRouter.post('/getAllMessage', complementaryMessageController.getAll)
+complementaryMessageRouter.post('/allUsers', complementaryMessageController.allUser)
+complementaryMessageRouter.post('/getUserMessage', complementaryMessageController.getAllUserMessage)
 
 
 
